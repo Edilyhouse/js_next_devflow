@@ -10,12 +10,12 @@ export const connectToDatabase = async () => {
   }
 
   if (isConnected) {
-    return;
+    return console.log("MONGODB IS ALREADY CONNECTED FROM MOONGOSE.TS");
   }
 
   try {
     await mongoose.connect(process.env.MONGODB_URL, {
-      dbName: "devflow",
+      dbName: "devflowjsmastery",
     });
 
     isConnected = true;
