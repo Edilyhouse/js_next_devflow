@@ -19,12 +19,19 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "../ui/badge";
 import Image from "next/image";
 import { createQuestion } from "@/lib/actions/question.action";
+import { useRouter, usePathname } from "next/navigation";
 
 const type: any = "create";
 
-const Question = () => {
+interface Props {
+  mongoUserId: string;
+}
+
+const Question = ({ mongoUserId }: Props) => {
   const editorRef = useRef(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const router = useRouter();
+  const pathname = usePathname();
 
   const form = useForm<z.infer<typeof QuestionsSchema>>({
     resolver: zodResolver(QuestionsSchema),
@@ -39,9 +46,16 @@ const Question = () => {
     setIsSubmitting(true);
     try {
       // make an async call to API -> to create a question
-      await createQuestion({});
+      await createQuestion({
+        title: values.title,
+        content: values.explanation,
+        tags: values.tags,
+        author: JSON.parse(mongoUserId),
+        path: pathname,
+      });
       // it should contain all the form data
       // naviage to home page after it is done
+      router.push("/");
       console.log(values);
     } catch (error) {
       console.log("Error desde trycatch create questions", error);
