@@ -7,7 +7,6 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   const WEBHOOK_SECRET = process.env.NEXT_CLERK_WEBHOOK_SECRET;
-  console.log("pinche password webhook", WEBHOOK_SECRET);
 
   if (!WEBHOOK_SECRET) {
     throw new Error(
