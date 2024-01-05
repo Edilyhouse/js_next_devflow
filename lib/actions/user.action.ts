@@ -64,6 +64,8 @@ export async function deleteUser(params: DeleteUserParams) {
 
     // Delete user from data, questions, answer, comments, etc.
     // Starts getting the  Questions to after delete the answers attached to those questions
+    // TODO add a validations when questions.find will not find anything to avoid page down
+
     const userQuestionsIds = await Question.find({ author: user._id }).distinct(
       "_id"
     );
