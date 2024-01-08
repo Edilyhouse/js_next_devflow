@@ -6,6 +6,7 @@ import {
   CreateUserParams,
   UpdateUserParams,
   DeleteUserParams,
+  GetAllUsersParams,
 } from "./shared.types";
 import { revalidatePath } from "next/cache";
 import Question from "@/database/question.model";
@@ -79,6 +80,35 @@ export async function deleteUser(params: DeleteUserParams) {
     return deletedUser;
   } catch (error) {
     console.log("Error to delete a User", error);
+    throw error;
+  }
+}
+
+// fopy from here
+
+// export async function getAllUsers(params: GetAllUsersParams) {
+//   try {
+//     connectToDatabase();
+//   } catch (error) {
+//     console.log("error getting all users", error);
+//     throw error;
+//   }
+// }
+
+//
+//
+// Get all users
+
+export async function getAllUsers(params: GetAllUsersParams) {
+  try {
+    connectToDatabase();
+    // const { page = 1 , pageSize = 20, filter, searchQuery } = params;
+
+    const users = await User.find({}).sort({ createdAt: -1 });
+
+    return { users };
+  } catch (error) {
+    console.log("error getting all users", error);
     throw error;
   }
 }
