@@ -13,15 +13,27 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Editor } from "@tinymce/tinymce-react";
 import { useRef, useState } from "react";
-import { useTheme } from "@/context/ThemeProvider";
 import { Button } from "../ui/button";
 import Image from "next/image";
+import { useTheme } from "@/context/ThemeProvider";
+import { createAnswer } from "@/lib/actions/answer.action";
+import { usePathname } from "next/navigation";
 
-const Answer = () => {
+interface Props {
+  question: string;
+  questionId: string;
+  authorId: string;
+}
+
+const Answer = ({ question, questionId, authorId }: Props) => {
+  // eslint-disable-next-line
   const [isSubmitting, setIsSubmitting] = useState(false);
-  console.log("borrar esto, desde answer tsx", setIsSubmitting);
+  const pathname = usePathname();
   const { mode } = useTheme();
+
+  // esto esta en la documentacion de shadcdn para useForm no es de react propiamente
   const editorRef = useRef(null);
+
   const form = useForm<z.infer<typeof AnswerSchema>>({
     resolver: zodResolver(AnswerSchema),
     defaultValues: {
@@ -29,7 +41,28 @@ const Answer = () => {
     },
   });
 
-  const handleCreateAnswer = () => {};
+  const handleCreateAnswer = async (values: z.infer<typeof AnswerSchema>) => {
+    setIsSubmitting(true);
+    try {
+      await createAnswer({
+        content: values.answer,
+        author: JSON.parse(authorId),
+        question: JSON.parse(questionId),
+        path: pathname,
+      });
+
+      // before creating an answer clean our form and editor
+      form.reset();
+      if (editorRef.current) {
+        const editor = editorRef.current as any;
+        editor.setContent("");
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div>
@@ -110,7 +143,7 @@ const Answer = () => {
 
           <div className="flex justify-end">
             <Button
-              type="button"
+              type="submit"
               className="primary-gradient w-fit text-white"
               disabled={isSubmitting}
             >

@@ -20,7 +20,7 @@ export const connectToDatabase = async () => {
 
     isConnected = true;
 
-    console.log("MongoDB is connected");
+    console.log("Atlas Connected and Running!!!");
   } catch (error) {
     console.log("MongoDB connection failed", error);
   }

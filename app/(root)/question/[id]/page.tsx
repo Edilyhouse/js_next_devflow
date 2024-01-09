@@ -1,12 +1,15 @@
 import Answer from "@/components/forms/Answer";
+import React from "react";
+import AllAnswers from "@/components/shared/AllAnswers";
 import Metric from "@/components/shared/Metric";
 import ParseHTML from "@/components/shared/ParseHTML";
 import RenderTag from "@/components/shared/RenderTag";
 import { getQuestionById } from "@/lib/actions/question.action";
+import { getUserById } from "@/lib/actions/user.action";
 import { formatAndDivideNumber, getTimestamp } from "@/lib/utils";
+import { auth } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
 
 interface PageProps {
   params: {
@@ -16,7 +19,18 @@ interface PageProps {
 
 const Page: React.FC<PageProps> = async ({ params }) => {
   const result = await getQuestionById({ questionId: params.id });
+  const { userId: clerkId } = auth();
 
+  // Buscamos traer el Id del usuario que va a hacer la respuesta
+  // luego enviamos ese usuario al componente <Answer /> como props
+
+  let mongoUser;
+
+  if (clerkId) {
+    mongoUser = await getUserById({ userId: clerkId });
+  }
+
+  console.log(" ***************  ", typeof result._id);
   return (
     <>
       <div className="flex-start w-full flex-col">
@@ -79,8 +93,16 @@ const Page: React.FC<PageProps> = async ({ params }) => {
           />
         ))}
       </div>
-
-      <Answer />
+      <AllAnswers
+        questionId={result._id}
+        userId={JSON.stringify(mongoUser._id)}
+        totalAnswers={result.answers.length}
+      />
+      <Answer
+        question={result.content}
+        questionId={JSON.stringify(result._id)}
+        authorId={JSON.stringify(mongoUser._id)}
+      />
     </>
   );
 };
