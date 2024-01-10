@@ -24,7 +24,7 @@ interface Props {
   questionId: string;
   authorId: string;
 }
-
+// eslint-disable-next-line
 const Answer = ({ question, questionId, authorId }: Props) => {
   // eslint-disable-next-line
   const [isSubmitting, setIsSubmitting] = useState(false);
