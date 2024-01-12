@@ -4,6 +4,7 @@ import RenderTag from "../shared/RenderTag";
 import Metric from "../shared/Metric";
 
 import { formatAndDivideNumber, getTimestamp } from "@/lib/utils";
+
 interface QuestionProps {
   _id: string;
   title: string;
@@ -20,6 +21,7 @@ interface QuestionProps {
   views: number;
   answers: Array<object>;
   createdAt: Date;
+  clerkId?: string;
 }
 
 const QuestionCard = ({
@@ -31,6 +33,7 @@ const QuestionCard = ({
   views,
   answers,
   createdAt,
+  clerkId,
 }: QuestionProps) => {
   return (
     <div className="card-wrapper rounded-[10px] p-9 sm:px-11">

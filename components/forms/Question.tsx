@@ -58,7 +58,6 @@ const Question = ({ mongoUserId }: Props) => {
       // it should contain all the form data
       // naviage to home page after it is done
       router.push("/");
-      console.log(values);
     } catch (error) {
       console.log("Error desde trycatch create questions", error);
     } finally {
