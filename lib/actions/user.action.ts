@@ -17,7 +17,7 @@ import { revalidatePath } from "next/cache";
 import Question from "@/database/question.model";
 import Tag from "@/database/tag.model";
 import Answer from "@/database/answer.model";
-import { BadgeCriteriaType } from "@/types";
+// import { BadgeCriteriaType } from "@/types";
 
 export async function getUserById(params: any) {
   try {
@@ -92,19 +92,6 @@ export async function deleteUser(params: DeleteUserParams) {
   }
 }
 
-// fopy from here
-
-// export async function getAllUsers(params: GetAllUsersParams) {
-//   try {
-//     connectToDatabase();
-//   } catch (error) {
-//     console.log("error getting all users", error);
-//     throw error;
-//   }
-// }
-
-//
-//
 // Get all users
 
 export async function getAllUsers(params: GetAllUsersParams) {
@@ -197,7 +184,6 @@ export async function getSavedQuestions(params: GetSavedQuestionsParams) {
 export async function getUserInfo(params: GetUserByIdParams) {
   try {
     connectToDatabase();
-
     const { userId } = params;
 
     const user = await User.findOne({ clerkId: userId });
